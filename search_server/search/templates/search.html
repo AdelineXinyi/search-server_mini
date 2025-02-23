@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <title>Search Page</title>
+</head>
+</head>
+<body>
+  <div class="feed">
+    <!-- Ask485 Title Section -->
+    <div class="ask485">
+        <h1>ask485</h1>
+    </div>
+    <!-- Search Bar -->
+    <form action="/" method="GET" class="search_bar">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Search..." 
+            value="{{ request.args.get('q', '') }}" 
+            required 
+        />
+        <div class="pagerank_weight">PageRank Weight</div>
+        <input 
+            type="range" 
+            name="w" 
+            min="0" 
+            max="1" 
+            value="{{ request.args.get('w', 0.5) }}" 
+            step="0.01" 
+        />
+        <input type="submit" value="Search"/>
+    </form>
+
+    <!-- Search Results -->
+    <main>
+        {% if results and results|length > 0 %}
+            <div class="docs">
+                {% for result in results[:10] %}
+                    <div class="doc">
+                        <div class="doc_title">{{ result.title }}</div>
+                        <a class="doc_url" href="{{ result.url }}" target="_blank" rel="noopener noreferrer">
+                            {{ result.url }}
+                        </a>
+                        <div class="doc_summary">
+                            {{ result.summary if result.summary else "No summary available" }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no_results">No search results found!</div>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Search Server. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
